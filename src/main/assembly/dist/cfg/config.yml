@@ -108,7 +108,7 @@ userProfiles:
     #
     # data/5c08c155-a986-4833-b465-ab31a12288ae  data/path/to/original/file.txt
     #
-    filepathMapping: true
+    filepathMapping: false
 
   #
   # Settings for specific users.
