@@ -97,7 +97,7 @@ class BagExtractorImplTest extends TestFixture {
         new BagExtractorImpl(zipService, fileService, bagItManager, filesystemSpaceVerifier)
             .extractWithFilePathMapping(zipFile, testPath.resolve("emptydir"), 1, Map.of());
 
-        assertEquals(0, fileService.deleteRegularFilesFromDirectory(testPath.resolve("emptydir")).count());
+        assertEquals(0, fileService.listFiles(testPath.resolve("emptydir")).count());
     }
 
     @Test
@@ -107,7 +107,7 @@ class BagExtractorImplTest extends TestFixture {
         new BagExtractorImpl(zipService, fileService, bagItManager, filesystemSpaceVerifier)
             .extractWithFilePathMapping(zipFile, testPath.resolve("dir1"), 1, Map.of());
 
-        assertEquals(1, fileService.deleteRegularFilesFromDirectory(testPath.resolve("dir1")).count());
+        assertEquals(1, fileService.listFiles(testPath.resolve("dir1")).count());
 
         var contents = FileUtils.readFileToString(testPath.resolve("dir1/test.txt").toFile(), StandardCharsets.UTF_8);
         assertEquals("test", contents.trim());
@@ -121,7 +121,7 @@ class BagExtractorImplTest extends TestFixture {
         new BagExtractorImpl(zipService, fileService, bagItManager, filesystemSpaceVerifier)
             .extractWithFilePathMapping(zipFile, testPath.resolve("dir1"), 1, filePathMapping);
 
-        assertEquals(1, fileService.deleteRegularFilesFromDirectory(testPath.resolve("dir1")).count());
+        assertEquals(1, fileService.listFiles(testPath.resolve("dir1")).count());
 
         var contents = FileUtils.readFileToString(testPath.resolve("dir1/renamed.txt").toFile(), StandardCharsets.UTF_8);
         assertEquals("test", contents.trim());
@@ -149,7 +149,7 @@ class BagExtractorImplTest extends TestFixture {
         new BagExtractorImpl(zipService, fileService, bagItManager, filesystemSpaceVerifier)
             .extractWithFilePathMapping(zipFile, testPath.resolve("dir1"), 1, filePathMapping);
 
-        assertEquals(1, fileService.deleteRegularFilesFromDirectory(testPath.resolve("dir1")).count());
+        assertEquals(1, fileService.listFiles(testPath.resolve("dir1")).count());
 
         var contents = FileUtils.readFileToString(testPath.resolve("dir1/renamed.txt").toFile(), StandardCharsets.UTF_8);
         assertEquals("test", contents.trim());
@@ -165,7 +165,7 @@ class BagExtractorImplTest extends TestFixture {
         new BagExtractorImpl(zipService, fileService, bagItManager, filesystemSpaceVerifier)
             .extractWithFilePathMapping(zipFile, testPath.resolve("dir1"), 1, filePathMapping);
 
-        assertEquals(3, fileService.deleteRegularFilesFromDirectory(testPath.resolve("dir1")).count());
+        assertEquals(3, fileService.listFiles(testPath.resolve("dir1")).count());
 
         var contents1 = FileUtils.readFileToString(testPath.resolve("dir1/renamed.txt").toFile(), StandardCharsets.UTF_8);
         assertEquals("test", contents1.trim());
@@ -189,7 +189,7 @@ class BagExtractorImplTest extends TestFixture {
         new BagExtractorImpl(zipService, fileService, bagItManager, filesystemSpaceVerifier)
             .extractOctetStream(testPath, 1, false);
 
-        assertEquals(1, fileService.deleteRegularFilesFromDirectory(testPath).count());
+        assertEquals(1, fileService.listFiles(testPath).count());
     }
 
     Path copyPartOfFile(Path zipFile, Path name, int start, long size) throws IOException {

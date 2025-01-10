@@ -88,7 +88,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Stream<Path> deleteRegularFilesFromDirectory(Path path) throws IOException {
+    public Stream<Path> listFiles(Path path) throws IOException {
         return Files.list(path).filter(Files::isRegularFile);
     }
 

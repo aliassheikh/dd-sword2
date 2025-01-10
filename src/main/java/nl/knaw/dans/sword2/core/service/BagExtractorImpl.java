@@ -111,15 +111,19 @@ public class BagExtractorImpl implements BagExtractor {
     }
 
     void extractZips(Path path, long diskSpaceMargin, boolean filePathMapping) throws IOException, InvalidDepositException, NotEnoughDiskSpaceException {
-        var files = getDepositFiles(path);
+        var files = getZipFilesInDeposit(path);
 
         for (var zipFile : files) {
             extract(zipFile, path, diskSpaceMargin, filePathMapping);
         }
     }
 
+    List<Path> getZipFilesInDeposit(Path path) throws IOException {
+        return fileService.listFiles(path).filter(f -> f.getFileName().toString().endsWith(".zip")).collect(Collectors.toList());
+    }
+
     List<Path> getDepositFiles(Path path) throws IOException {
-        return fileService.deleteRegularFilesFromDirectory(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties"))).collect(Collectors.toList());
+        return fileService.listFiles(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties"))).collect(Collectors.toList());
     }
 
     void extract(Path zipFile, Path target, long diskSpaceMargin, boolean filePathMapping) throws IOException, InvalidDepositException, NotEnoughDiskSpaceException {

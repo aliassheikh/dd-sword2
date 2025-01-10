@@ -426,7 +426,7 @@ public class DepositHandlerImpl implements DepositHandler {
     }
 
     private Stream<Path> getDepositFiles(Path path) throws IOException {
-        return fileService.deleteRegularFilesFromDirectory(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties")));
+        return fileService.listFiles(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties")));
     }
 
     private void removeZipFiles(Path path) throws IOException {

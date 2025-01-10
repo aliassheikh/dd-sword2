@@ -33,7 +33,7 @@ public interface FileService {
 
     long getAvailableDiskSpace(Path path) throws IOException;
 
-    Stream<Path> deleteRegularFilesFromDirectory(Path path) throws IOException;
+    Stream<Path> listFiles(Path path) throws IOException;
 
     List<Path> listDirectories(Path path) throws IOException;
 

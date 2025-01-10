@@ -84,7 +84,7 @@ public class BagItManagerImpl implements BagItManager {
     }
 
     List<Path> getManifestFiles(Path path) throws IOException {
-        return fileService.deleteRegularFilesFromDirectory(path).filter(this::isManifestFile).collect(Collectors.toList());
+        return fileService.listFiles(path).filter(this::isManifestFile).collect(Collectors.toList());
     }
 
     List<Pair<String, String>> parseManifestFile(Path path, Map<String, String> filePathMapping) throws IOException {
