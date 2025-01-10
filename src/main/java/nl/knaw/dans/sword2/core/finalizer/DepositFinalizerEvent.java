@@ -16,34 +16,19 @@
  */
 package nl.knaw.dans.sword2.core.finalizer;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
+@ToString
+@Getter
+@AllArgsConstructor
 public class DepositFinalizerEvent {
 
     private final String depositId;
     private final DepositFinalizerEventType eventType;
 
-    public DepositFinalizerEvent(String depositId, DepositFinalizerEventType eventType) {
-        this.depositId = depositId;
-        this.eventType = eventType;
-    }
-
     public DepositFinalizerEvent(String depositId) {
-        this.depositId = depositId;
-        this.eventType = DepositFinalizerEventType.FINALIZE;
-    }
-
-    public DepositFinalizerEventType getEventType() {
-        return eventType;
-    }
-
-    public String getDepositId() {
-        return depositId;
-    }
-
-    @Override
-    public String toString() {
-        return "DepositFinalizerEvent{" +
-            "depositId='" + depositId + '\'' +
-            ", eventType=" + eventType +
-            '}';
+        this(depositId, DepositFinalizerEventType.FINALIZE);
     }
 }

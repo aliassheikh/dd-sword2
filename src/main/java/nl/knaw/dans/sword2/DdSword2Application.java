@@ -89,9 +89,6 @@ public class DdSword2Application extends Application<DdSword2Configuration> {
         var bagItManager = new BagItManagerImpl(fileService, checksumCalculator);
         var userManager = new UserManagerImpl(configuration.getUserProfiles().getUsers(), configuration.getUserProfiles().getDefaultUserConfig());
 
-        var finalizingExecutor = configuration.getSword2().getFinalizingQueue().build(environment);
-        var rescheduleExecutor = configuration.getSword2().getRescheduleQueue().build(environment);
-
         var queue = new ArrayBlockingQueue<DepositFinalizerEvent>(configuration.getSword2().getFinalizingQueue().getMaxQueueSize());
 
         var collectionManager = new CollectionManagerImpl(configuration.getSword2().getCollections());
@@ -104,6 +101,8 @@ public class DdSword2Application extends Application<DdSword2Configuration> {
 
         var depositReceiptFactory = new DepositReceiptFactoryImpl(configuration.getSword2().getBaseUrl());
 
+        var finalizingExecutor = configuration.getSword2().getFinalizingQueue().build(environment);
+        var rescheduleExecutor = configuration.getSword2().getRescheduleQueue().build(environment);
         var depositFinalizerManager = new DepositFinalizerManager(finalizingExecutor, depositHandler, queue, rescheduleExecutor, configuration.getSword2().getRescheduleDelay());
 
         var httpClient = new HttpClientBuilder(environment).using(configuration.getHttpClient())

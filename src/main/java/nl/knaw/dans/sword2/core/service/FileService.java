@@ -33,7 +33,7 @@ public interface FileService {
 
     long getAvailableDiskSpace(Path path) throws IOException;
 
-    Stream<Path> listFiles(Path path) throws IOException;
+    Stream<Path> deleteRegularFilesFromDirectory(Path path) throws IOException;
 
     List<Path> listDirectories(Path path) throws IOException;
 
@@ -42,6 +42,8 @@ public interface FileService {
     void move(Path sourcePath, Path targetPath) throws IOException;
 
     Path mergeFiles(List<Path> files, Path target) throws IOException;
+
+    void deleteFiles(List<Path> files) throws IOException;
 
     boolean exists(Path path);
 

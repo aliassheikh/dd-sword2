@@ -47,6 +47,7 @@ import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.ZipException;
 
 public class DepositHandlerImpl implements DepositHandler {
 
@@ -323,11 +324,11 @@ public class DepositHandlerImpl implements DepositHandler {
 
             return deposit;
         }
-        catch (InvalidDepositException | InvalidPartialFileException e) {
+        catch (InvalidDepositException | InvalidPartialFileException | ZipException e) {
             setDepositToInvalid(depositId, e.getMessage());
             throw e;
         }
-        catch (CollectionNotFoundException e) {
+        catch (Exception e) {
             setDepositToFailed(depositId, getGenericErrorMessage(depositId));
             throw e;
         }
@@ -425,7 +426,7 @@ public class DepositHandlerImpl implements DepositHandler {
     }
 
     private Stream<Path> getDepositFiles(Path path) throws IOException {
-        return fileService.listFiles(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties")));
+        return fileService.deleteRegularFilesFromDirectory(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties")));
     }
 
     private void removeZipFiles(Path path) throws IOException {

@@ -88,13 +88,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Stream<Path> listFiles(Path path) throws IOException {
+    public Stream<Path> deleteRegularFilesFromDirectory(Path path) throws IOException {
         return Files.list(path).filter(Files::isRegularFile);
     }
 
     @Override
     public List<Path> listDirectories(Path path) throws IOException {
-        return Files.list(path).filter(Files::isDirectory).collect(Collectors.toList());
+        try (var stream = Files.list(path)) {
+            return stream.filter(Files::isDirectory).collect(Collectors.toList());
+        }
     }
 
     @Override
@@ -115,13 +117,14 @@ public class FileServiceImpl implements FileService {
                 IOUtils.copy(Files.newInputStream(file), output);
             }
         }
-        finally {
-            for (var file : files) {
-                Files.deleteIfExists(file);
-            }
-        }
-
         return target;
+    }
+
+    @Override
+    public void deleteFiles(List<Path> files) throws IOException {
+        for (var file : files) {
+            Files.deleteIfExists(file);
+        }
     }
 
     @Override

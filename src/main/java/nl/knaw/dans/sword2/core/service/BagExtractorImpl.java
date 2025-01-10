@@ -84,6 +84,8 @@ public class BagExtractorImpl implements BagExtractor {
 
         log.debug("Extracting merged zip in path {}", path);
         extractZips(path, diskSpaceMargin, filePathMapping);
+        log.debug("Deleting chunks");
+        fileService.deleteFiles(files);
     }
 
     int getSequenceNumber(Path path) throws InvalidPartialFileException {
@@ -117,7 +119,7 @@ public class BagExtractorImpl implements BagExtractor {
     }
 
     List<Path> getDepositFiles(Path path) throws IOException {
-        return fileService.listFiles(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties"))).collect(Collectors.toList());
+        return fileService.deleteRegularFilesFromDirectory(path).filter(f -> !f.getFileName().equals(Path.of("deposit.properties"))).collect(Collectors.toList());
     }
 
     void extract(Path zipFile, Path target, long diskSpaceMargin, boolean filePathMapping) throws IOException, InvalidDepositException, NotEnoughDiskSpaceException {

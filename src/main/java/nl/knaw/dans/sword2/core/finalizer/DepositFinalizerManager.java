@@ -28,9 +28,9 @@ public class DepositFinalizerManager implements Managed {
     private static final Logger log = LoggerFactory.getLogger(DepositFinalizerManager.class);
 
     private final DepositHandler depositHandler;
+    private final ExecutorService finalizerQueue;
     private final Thread depositFinalizerListenerThread;
     private final BlockingQueue<DepositFinalizerEvent> taskQueue;
-    private final ExecutorService finalizerQueue;
     private final ExecutorService rescheduleQueue;
 
     public DepositFinalizerManager(ExecutorService finalizerQueue, DepositHandler depositHandler,
