@@ -26,7 +26,6 @@ logging:
       # Used in combination with journald, which already adds the timestamp
     - type: console
       logFormat: "%-5p %c{0}: %m%n%dwREx"
-      timeZone: system
   loggers:
     'org.hibernate.engine.internal.StatisticalLoggingSessionEventListener': 'OFF'
 
