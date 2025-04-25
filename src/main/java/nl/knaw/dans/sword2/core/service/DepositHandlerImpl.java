@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.sword2.core.service;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.sword2.core.Deposit;
 import nl.knaw.dans.sword2.core.DepositState;
 import nl.knaw.dans.sword2.core.auth.Depositor;
@@ -49,9 +50,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipException;
 
+@Slf4j
 public class DepositHandlerImpl implements DepositHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(DepositHandlerImpl.class);
     private static final Set<MediaType> SUPPORTED_CONTENT_TYPES = Set.of(
         new MediaType("application", "zip"),
         new MediaType("application", "octet-stream")
