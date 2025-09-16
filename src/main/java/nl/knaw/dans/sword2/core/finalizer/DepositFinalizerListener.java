@@ -49,7 +49,7 @@ public class DepositFinalizerListener implements Runnable {
             try {
                 var depositTask = taskQueue.take();
 
-                log.info("Received task from queue: {}", depositTask);
+                log.debug("Received task from queue: {}", depositTask);
 
                 switch (depositTask.getEventType()) {
                     case STOP:

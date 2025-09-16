@@ -48,16 +48,16 @@ public class DepositFinalizer implements Runnable {
             log.info("Finalized deposit {}", deposit);
         }
         catch (DepositNotFoundException e) {
-            log.error("Unable to finalize deposit with id {} because it could not be found", depositId, e);
+            log.warn("Unable to finalize deposit with id {} because it could not be found", depositId, e);
         }
         catch (InvalidDepositException e) {
-            log.error("Unable to finalize deposit with id {} because it is invalid", depositId, e);
+            log.warn("Unable to finalize deposit with id {} because it is invalid", depositId, e);
         }
         catch (InvalidPartialFileException e) {
-            log.error("Unable to finalize deposit with id {} because some files are incorrectly named", depositId, e);
+            log.warn("Unable to finalize deposit with id {} because some files are incorrectly named", depositId, e);
         }
         catch (CollectionNotFoundException e) {
-            log.error("Unable to finalize deposit with id {} because the collection could not be found", depositId, e);
+            log.warn("Unable to finalize deposit with id {} because the collection could not be found", depositId, e);
         }
         catch (NotEnoughDiskSpaceException e) {
             try {

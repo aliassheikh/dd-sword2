@@ -141,11 +141,11 @@ public class StatementResourceImpl extends BaseResource implements StatementReso
                 .build();
         }
         catch (DepositNotFoundException e) {
-            log.error("Deposit with id {} could not be found", depositId, e);
+            log.warn("Deposit with id {} could not be found", depositId);
             throw new WebApplicationException(404);
         }
         catch (URISyntaxException e) {
-            log.error("Unable to create URI from ID {}", depositId, e);
+            log.error("Unable to create URI from ID {}", depositId);
             throw new WebApplicationException(500);
         }
     }

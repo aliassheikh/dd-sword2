@@ -144,7 +144,7 @@ public class DepositHandlerImpl implements DepositHandler {
     }
 
     void cleanupFile(Path path) {
-        log.info("Cleaning up file {}", path);
+        log.debug("Cleaning up file {}", path);
 
         try {
             fileService.deleteFile(path);
@@ -384,7 +384,7 @@ public class DepositHandlerImpl implements DepositHandler {
         try {
             var path = deposit.getPath();
 
-            log.info("Marking deposit with id {} as INVALID; reason: {}", depositId, message);
+            log.warn("Marking deposit with id {} as INVALID; reason: {}", depositId, message);
             deposit.setState(DepositState.INVALID);
             deposit.setStateDescription(message);
             depositPropertiesManager.saveProperties(path, deposit);
@@ -416,7 +416,7 @@ public class DepositHandlerImpl implements DepositHandler {
         try {
             var path = deposit.getPath();
 
-            log.info("Marking deposit with id {} as FAILED; reason: {}", depositId, message);
+            log.warn("Marking deposit with id {} as FAILED; reason: {}", depositId, message);
             deposit.setState(DepositState.FAILED);
             deposit.setStateDescription(message);
             depositPropertiesManager.saveProperties(path, deposit);

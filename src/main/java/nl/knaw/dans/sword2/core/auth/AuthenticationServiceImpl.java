@@ -93,7 +93,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return Optional.ofNullable(tree.get("userId").asText());
         }
         catch (Exception e) {
-            log.error("Error parsing JSON", e);
+            log.warn("Error parsing JSON", e);
         }
 
         return Optional.empty();
