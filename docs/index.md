@@ -3,40 +3,20 @@ dd-sword2
 
 DANS SWORD v2 based deposit service
 
-SYNOPSIS
---------
-
-    dd-sword2 { server | check }
-
-DESCRIPTION
------------
-
-### Overview
-
-#### Context
-
-The `dd-sword2` service is the [DANS]{:target=_blank} implementation of the [SWORDv2]{:target=_blank} protocol. It is a rewrite in Java of the Scala-based
-project [easy-sword2]{:target=_blank}. Like its predecessor, it does **not** implement the full SWORDv2 specifications. Also, since the SWORDv2 specs leave
-various important issues up to the implementer, the service adds some features.
-
-The best starting point for learning about `dd-sword2` is this document. Where appropriate, this document contains references to the
-[SWORDv2 specifications document]{:target=_blank}. When reading the SWORDv2 docs, keep in mind that it is itself built on other specifications, and refers to
-those often, especially:
-
-* [AtomPub]{:target=_blank}
-* [Atom]{:target=_blank}
-* [HTTP]{:target=_blank}
-
-#### Purpose of the service
+Purpose
+-------
 
 At the highest level `dd-sword2` is a service that accepts ZIP packages that comply with the [BagIt]{:target=_blank} packaging format and produces a
 [deposit directory]{:target=_blank} for each.
 
-### Interfaces (provided)
+Interfaces
+----------
 
 The service has the following interfaces.
 
 ![Overview](img/overview.png){:width=50%}
+
+### Provided interfaces
 
 #### SWORDv2
 
@@ -57,7 +37,7 @@ The service has the following interfaces.
 * _Internal or external_: **internal**
 * _Purpose_: application monitoring and management
 
-### Interfaces (consumed)
+### Consumed interfaces
 
 The service consumes the following interfaces.
 
@@ -67,9 +47,10 @@ The service consumes the following interfaces.
 * _Internal or external_: **internal**
 * _Purpose_: delegate authentication of a client for SWORD2
 
-Authentication is discussed in more detail ot the [User profiles & authentication page](auth.md).
+Authentication is discussed in more detail ot the [User profiles & authentication page](users.md).
 
-### Processing
+Processing
+----------
 
 The following sections describe the interaction of a client with the SWORDv2 interface. The examples are [curl]{:target=_blank} commands. The meaning of the
 shell variables is as follows:
@@ -82,7 +63,7 @@ shell variables is as follows:
 | `SWORD_COL_IRI`    | the URL of the collection that the deposit is sent to                                                                   |
 | `SWORD_EDIT_IRI`   | the URL to send subsequent parts to in a continued deposit                                                              | 
 
-#### Getting the service document
+### Getting the service document
 
 The [service document]{:target=_blank} is an XML document that lets the client discover the capabilities and the supported collections of the service. It can
 be [retrieved](https://swordapp.github.io/SWORDv2-Profile/SWORDProfile.html#protocoloperations_retreivingservicedocument){:target=_blank} with a simple
@@ -100,7 +81,7 @@ curl -X GET -u $USER:$PASSWORD $SWORD_BASE_URL/servicedocument
     curl -X GET -u $USER:$PASSWORD $SWORD_BASE_URL/servicedocument | xmllint --format - 
     ```
 
-#### Creating and submitting a deposit
+### Creating and submitting a deposit
 
 A deposit is created by [binary file deposit]{:target=_blank}. The other options that SWORDv2 specifies are currently not supported. Furthermore, the only
 [packaging]{:target=_blank} that is supported is `http://purl.org/net/sword/package/BagIt`. This means that:
@@ -129,7 +110,7 @@ On Linux you can use `$(md5sum $BAG | cut -d ' ' -f)`.)
 If the upload is successful, the client will receive a [deposit receipt]{:target=_blank}. This is an Atom Entry document that contains, among other things, the
 statement URL (Stat-IRI), which is the URL the client can use to [track post-submision processing](#tracking-post-submission-processing).
 
-#### Continued deposit
+### Continued deposit
 
 If the bag to be uploaded is larger than 1G it is recommended to use a [continued deposit]{:target=_blank}. The client must split the ZIP file into chunks and
 send these in separate requests with the `In-Progress` header set to `true` for all chunks except the last. The names of the chunk files must be: the name of
@@ -203,7 +184,7 @@ curl -X POST \
 After this, the client will have to wait for the server to process the deposit. It should [track the progress](#tracking-post-submission-processing) until the
 the server has confirmed that the deposit was fully processed.
 
-#### Finalizing a deposit
+### Finalizing a deposit
 
 When the client sends (the first part of) a bag, the server creates a draft [deposit directory]{:target=_blank}. As long as the client is uploading parts of the
 deposit, the state of the deposit directory is `DRAFT`. When the last part has been received, the state becomes `UPLOADED`. An "uploaded" deposit is waiting for
@@ -224,7 +205,7 @@ After this `dd-sword2`, will **not write to the deposit in any way**. In other w
 further processing to a post-submission process. The only thing that `dd-sword2` will continue to do is to serve the client the SWORD Statement whenever
 requested. This ensures the client can keep track of the deposit even after `dd-sword2` is finished with it.
 
-#### Tracking post-submission processing
+### Tracking post-submission processing
 
 As soon as the deposit exists, the client can track its state by downloading the SWORD [statement]{:target=_blank} from the Statement URL
 ([Stat-IRI]{:target=_blank}). This URL can be found in the deposit receipt in the link with the attribute `rel="http://purl.org/net/sword/terms/statement"`.
@@ -269,59 +250,11 @@ post-submission processing has finished with successfully archiving the deposit.
 | `SUBMITTED`  | The deposit is submitted for processing. `dd-sword2` will not update it anymore <br/> and limit itself to providing a Statement document on request.                                                                                         |
 | `FAILED`     | An error occurred while processing the deposit                                                                                                                                                                                               | 
 
-ARGUMENTS
----------
-
-        positional arguments:
-        {server,check}         available commands
-        
-        named arguments:
-        -h, --help             show this help message and exit
-        -v, --version          show the application version and exit
 
 EXAMPLES
 --------
 
 Java client code examples are available in [dd-dans-sword2-examples]{:target=_blank}.
-
-INSTALLATION
-------------
-Currently this project is built as an RPM package for RHEL7/CentOS7 and later. The RPM will install the binaries to
-`/opt/dans.knaw.nl/dd-sword2` and the configuration files to `/etc/opt/dans.knaw.nl/dd-sword2`.
-
-For installation on systems that do no support RPM and/or systemd:
-
-1. Build the tarball (see next section).
-2. Extract it to some location on your system, for example `/opt/dans.knaw.nl/dd-sword2`.
-3. Start the service with the following command
-   ```bash
-   /opt/dans.knaw.nl/dd-sword2/bin/dd-sword2 server /opt/dans.knaw.nl/dd-sword2/cfg/config.yml 
-   ```
-
-CONFIGURATION
--------------
-This service can be configured by changing the settings in [config.yml]{:target=_blank}. See the comments in that file for more information.
-
-BUILDING FROM SOURCE
---------------------
-Prerequisites:
-
-* Java 11 or higher
-* Maven 3.3.3 or higher
-* RPM
-
-Steps:
-
-    git clone https://github.com/DANS-KNAW/dd-sword2.git
-    cd dd-sword2 
-    mvn clean install
-
-If the `rpm` executable is found at `/usr/local/bin/rpm`, the build profile that includes the RPM packaging will be activated. If `rpm` is available, but at a
-different path, then activate it by using Maven's `-P` switch: `mvn -Prpm install`.
-
-Alternatively, to build the tarball execute:
-
-    mvn clean install assembly:single
 
 [DANS]: https://www.dans.knaw.nl/
 
