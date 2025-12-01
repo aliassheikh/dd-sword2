@@ -82,6 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return switch (statusCode) {
                 case 200 -> getUsernameFromResponse(response);
                 case 401 -> Optional.empty();
+                case 400 -> throw new AuthenticationException("Bad request sent to authentication delegate");
                 default -> throw new AuthenticationException(String.format("Unexpected status code returned: %s (message: %s)", statusCode, statusPhrase));
             };
         }

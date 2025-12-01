@@ -22,9 +22,14 @@ repo_name: DANS-KNAW/dd-sword2
 repo_url: https://github.com/DANS-KNAW/dd-sword2
 
 nav:
-  - Manual: index.md
-  - User profiles & authentication: auth.md
-  - ⇒ DANS Data Station Architecture: arch.md
+  - Manual:
+      - Description: index.md
+      - Users and authentication: users.md
+      - Installation: installation.md
+      - Configuration: config.md
+      - Context: context.md
+  - Development:
+      - Overview: dev.md
 
 plugins:
   - markdownextradata
